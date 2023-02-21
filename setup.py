@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import logging
 logger = logging.getLogger(__name__)
 
-version = '1.2.2'
+version = '1.9.0'
 
 try:
     with open('README.md', 'r') as f:
@@ -15,7 +15,7 @@ setup(
     name = 'drawSvg',
     packages = find_packages(),
     version = version,
-    description = 'A Python 3 library for programmatically generating SVG images (vector drawings) and rendering them or displaying them in an iPython notebook.',
+    description = 'A Python 3 library for programmatically generating SVG images (vector drawings) and rendering them or displaying them in a Jupyter notebook',
     long_description = long_desc,
     long_description_content_type = 'text/markdown',
     author = 'Casey Duckering',

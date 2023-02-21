@@ -6,8 +6,6 @@ class DrawingDef(DrawingParentElement):
     ''' Parent class of SVG nodes that must be direct children of <defs> '''
     def getSvgDefs(self):
         return (self,)
-    def writeSvgDefs(self, idGen, isDuplicate, outputFile):
-        DrawingElement.writeSvgDefs(idGen, isDuplicate, outputFile)
 
 class DrawingDefSub(DrawingParentElement):
     ''' Parent class of SVG nodes that are meant to be descendants of a Def '''
@@ -65,3 +63,42 @@ class ClipPath(DrawingDef):
         Has regular drawing elements as children. '''
     TAG_NAME = 'clipPath'
 
+class Mask(DrawingDef):
+    ''' A drawing where the gray value and transparency are used to control the
+        transparency of another shape.
+
+        Has regular drawing elements as children. '''
+    TAG_NAME = 'mask'
+
+class Filter(DrawingDef):
+    ''' A filter to apply to geometry
+
+        For example a blur filter. '''
+    TAG_NAME = 'filter'
+
+class FilterItem(DrawingDefSub):
+    ''' A child of Filter with any tag name'''
+    hasContent = False
+    def __init__(self, tag_name, **args):
+        super().__init__(**args)
+        self.TAG_NAME = tag_name
+
+class Marker(DrawingDef):
+    ''' A small drawing that can be placed at the ends of (or along) a path.
+
+        This can be used for arrow heads or points on a graph for example.
+
+        By default, units are multiples of stroke width.'''
+    TAG_NAME = 'marker'
+    def __init__(self, minx, miny, maxx, maxy, scale=1, orient='auto',
+                 **kwargs):
+        width = maxx - minx
+        height = maxy - miny
+        kwargs = {
+            'markerWidth': width if scale == 1 else float(width) * scale,
+            'markerHeight': height if scale == 1 else float(height) * scale,
+            'viewBox': '{} {} {} {}'.format(minx, -maxy, width, height),
+            'orient': orient,
+            **kwargs,
+        }
+        super().__init__(**kwargs)
